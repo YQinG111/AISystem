@@ -1,9 +1,10 @@
 import argparse
 import logging
 import os
-import shutil
 
 from PIL import Image
+
+from utils import check_image, ensure_clean_dir
 
 logging.basicConfig(
     level=logging.INFO,
@@ -14,34 +15,6 @@ logger = logging.getLogger(__name__)
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-def check_image(img_path):
-    if(img_path.lower().endswith(('.bmp', '.dib', '.png', '.jpg', '.jpeg', '.pbm', '.pgm', '.ppm', '.tif', '.tiff'))):
-        return True
-    else:
-        return False
-
-def del_dir_byname(path):
-	if os.path.exists(path):
-		try:
-			shutil.rmtree(path)
-			logger.info("文件夹已删除！ %s", path)
-		except OSError as e:
-			logger.error("删除文件夹失败 %s: %s", path, e)
-			raise
-	else:
-		logger.info("文件夹不存在！ %s", path)
-
-
-def create_dir(path):
-	del_dir_byname(path)
-	try:
-		os.makedirs(path)
-	except OSError as e:
-		logger.error("创建文件夹失败 %s: %s", path, e)
-		raise
-	return path
-
-
 def apply_watermark(source_folder, output_folder, watermark_path):
     try:
         watermark = Image.open(watermark_path).convert("RGBA")
@@ -50,7 +23,7 @@ def apply_watermark(source_folder, output_folder, watermark_path):
         raise
     watermark_width, watermark_height = watermark.size
 
-    create_dir(output_folder)
+    ensure_clean_dir(output_folder)
 
     try:
         filenames = os.listdir(source_folder)
