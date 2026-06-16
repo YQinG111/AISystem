@@ -13,8 +13,15 @@ int main(void)
 {
   int N = 1<<25; // 30M elements
 
-  float *x = new float[N];
-  float *y = new float[N];
+  float *x = new (std::nothrow) float[N];
+  float *y = new (std::nothrow) float[N];
+
+  if (!x || !y) {
+    std::cerr << "Error: memory allocation failed" << std::endl;
+    delete[] x;
+    delete[] y;
+    return 1;
+  }
 
   // initialize x and y arrays on the host
   for (int i = 0; i < N; i++) {
@@ -28,6 +35,10 @@ int main(void)
   
   // Run Kernel on 30M elements on the CPU
   add(N, x, y);
+
+  gettimeofday(&t2,NULL);
+  timeuse = (t2.tv_sec - t1.tv_sec) * 1000.0 + (t2.tv_usec - t1.tv_usec) / 1000.0;
+  std::cout << "Time used: " << timeuse << " ms" << std::endl;
 
   // Free memory
   delete [] x;
