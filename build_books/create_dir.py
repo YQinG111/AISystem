@@ -158,16 +158,33 @@ def getallfile(path):
 				change_iamgepath_markdown(new_path+"/"+os.path.basename(fp))
 
 
-target_dir0 = '/Users/a1-6/Workspaces/AISystem/01Introduction'
-target_dir1 = '/Users/a1-6/Workspaces/AISystem/02Hardware'
-target_dir2 = '/Users/a1-6/Workspaces/AISystem/03Compiler'
-target_dir3 = '/Users/a1-6/Workspaces/AISystem/04Inference'
-target_dir4 = '/Users/a1-6/Workspaces/AISystem/05Framework'
-dir_paths = '/Users/a1-6/Workspaces/AISystem_BOOK/source/'
+if __name__ == "__main__":
+	import argparse
 
-getallfile(target_dir0)
-getallfile(target_dir1)
-getallfile(target_dir2)
-getallfile(target_dir3)
-getallfile(target_dir4)
+	REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+	parser = argparse.ArgumentParser(description="Create directory structure for AISystem book.")
+	parser.add_argument(
+		"--repo-root", default=REPO_ROOT,
+		help="Root of the AISystem repo (default: auto-detected).",
+	)
+	parser.add_argument(
+		"--output-dir", default=None,
+		help="Output source directory (default: <repo-root>_BOOK/source/).",
+	)
+	args = parser.parse_args()
+
+	repo_root = args.repo_root
+	dir_paths = args.output_dir or os.path.join(repo_root + "_BOOK", "source", "")
+
+	target_dirs = [
+		os.path.join(repo_root, "01Introduction"),
+		os.path.join(repo_root, "02Hardware"),
+		os.path.join(repo_root, "03Compiler"),
+		os.path.join(repo_root, "04Inference"),
+		os.path.join(repo_root, "05Framework"),
+	]
+
+	for target_dir in target_dirs:
+		getallfile(target_dir)
 
