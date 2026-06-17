@@ -11,3 +11,24 @@ _build/
 06Foundation/02AICluster/.DS_Store
 06Foundation/01Introduce/.DS_Store
 06Foundation/02AICluster/.DS_Store
+
+# Secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.secret
+id_rsa
+id_rsa.*
+credentials.json
+service-account*.json
+**/secrets/
+
+# Editor / IDE
+.idea/
+.vscode/
+*.swp
+*.swo
