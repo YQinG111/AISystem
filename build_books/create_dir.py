@@ -4,6 +4,8 @@ import logging
 import os
 import shutil
 
+from utils import del_dir_byname, check_markdown, check_pdf
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -16,18 +18,6 @@ TEMP = """
 :maxdepth: 1
 
 """
-
-
-def del_dir_byname(path):
-	if os.path.exists(path):
-		try:
-			shutil.rmtree(path)
-			logger.info("文件夹已删除！ %s", path)
-		except OSError as e:
-			logger.error("删除文件夹失败 %s: %s", path, e)
-			raise
-	else:
-		logger.info("文件夹不存在！ %s", path)
 
 
 def create_dir(path, name):
@@ -54,20 +44,6 @@ def copystrtodir(path1, path2, rename):
 		logger.error("复制目录失败 %s -> %s: %s", path1, new_path2, e)
 		raise
 
-
-def check_markdown(file_name):
-	root_ext = os.path.splitext(file_name)
-	if root_ext[1] == '.md':
-		return True
-	else:
-		return False
-
-def check_pdf(file_name):
-	root_ext = os.path.splitext(file_name)
-	if root_ext[1] == '.pdf':
-		return True
-	else:
-		return False
 
 def add2readme(file_path, string):
 	if file_path.split('/')[-1] == 'README.md':
